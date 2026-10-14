@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIT Birthday Wishes</title>
+<script>
+/* apply saved theme before first paint (default: dark) */
+(function(){var t='dark';try{t=localStorage.getItem('bit-theme')||'dark';}catch(e){}
+document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Core palette — deep forest + warm gold */
+  --bg:#0b0e0d;
+  --s0:#111714;   /* sidebar */
+  --s1:#161c18;   /* surface */
+  --s2:#1d2520;   /* surface raised */
+  --s3:#242d26;   /* surface hover */
+  --bdr:#2c3830;  /* border */
+  --bdr2:#3a4a3e; /* border stronger */
+
+  /* Accent */
+  --gold:#d4a843;
+  --gold2:#f0c96a;
+  --gold-dim:rgba(212,168,67,.12);
+  --gold-ring:rgba(212,168,67,.25);
+
+  /* Text */
+  --t1:#e8ede9;   /* primary */
+  --t2:#9aab9e;   /* secondary */
+  --t3:#5e6e62;   /* muted */
+
+  /* Status */
+  --green:#3fcf72;
+  --green-bg:rgba(63,207,114,.08);
+  --green-bdr:rgba(63,207,114,.25);
+  --red:#f0615c;
+  --red-bg:rgba(240,97,92,.08);
+  --red-bdr:rgba(240,97,92,.25);
+  --blue:#5b9cf6;
+  --blue-bg:rgba(91,156,246,.08);
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,.1);
+  --amber-bdr:rgba(245,166,35,.3);
+
+  --r:10px;
+  --r-lg:16px;
+  --sidebar:220px;
+
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-ui:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+
+/* ══════════════════════════════════════
+   THEME  (dark = default, light override)
+══════════════════════════════════════ */
+:root{
+  color-scheme:dark;
+  --on-gold:#0b0e0d;
+  --logbox:#080b09;
+  --toast-ok:#0a1f0f; --toast-err:#1f0a0a; --toast-info:#0a0f1f;
+  --shadow-auth:0 24px 80px rgba(0,0,0,.55),0 0 0 1px rgba(212,168,67,.06);
+  --shadow-pop:0 8px 28px rgba(0,0,0,.45);
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f3f0e8; --s0:#ffffff; --s1:#ffffff; --s2:#f7f4ec; --s3:#ebe6d8;
+  --bdr:#e2dccb; --bdr2:#cdc5ad;
+  --gold:#a67a12; --gold2:#c99a2e;
+  --gold-dim:rgba(166,122,18,.10); --gold-ring:rgba(166,122,18,.32);
+  --t1:#1b2420; --t2:#47574d; --t3:#78867c;
+  --green:#1b8f4e; --green-bg:rgba(27,143,78,.09); --green-bdr:rgba(27,143,78,.30);
+  --red:#d1403b;   --red-bg:rgba(209,64,59,.08);   --red-bdr:rgba(209,64,59,.30);
+  --blue:#2c6bd1;  --blue-bg:rgba(44,107,209,.08);
+  --amber:#b8710a; --amber-bg:rgba(184,113,10,.10); --amber-bdr:rgba(184,113,10,.32);
+  --logbox:#f7f4ec;
+  --toast-ok:#e8f6ee; --toast-err:#fdeceb; --toast-info:#eaf1fc;
+  --shadow-auth:0 18px 50px rgba(60,50,20,.14),0 0 0 1px rgba(166,122,18,.10);
+  --shadow-pop:0 8px 24px rgba(60,50,20,.18);
+}
+.sb-section{color:var(--t3)!important;opacity:.75}
+.auth-card{box-shadow:var(--shadow-auth)!important}
+.btn-login,.btn-primary,.sb-user-dot,.cal-cell .bpill,.cal-cell.today .bpill{color:var(--on-gold)}
+.log-box{background:var(--logbox)}
+#toast.success{background:var(--toast-ok)!important}
+#toast.error{background:var(--toast-err)!important}
+#toast.info{background:var(--toast-info)!important}
+.btn-so.btn-theme:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.theme-fab{position:fixed;top:16px;right:16px;z-index:10000;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--bdr);background:var(--s1);color:var(--t1);font-size:17px;cursor:pointer;transition:all .15s}
+.theme-fab:hover{border-color:var(--gold)}
+
+/* ══════════════════════════════════════
+   LOGO
+══════════════════════════════════════ */
+.sb-logo-icon.has-img{width:auto;height:auto;min-width:34px;max-width:72px;padding:3px 5px;background:#fff;border-color:var(--bdr)}
+.sb-logo-icon.has-img img{height:38px;width:auto;max-width:60px;display:block;object-fit:contain}
+.auth-brand .brand-icon.has-img{width:auto;min-width:64px;padding:8px 16px;background:#fff;animation:none}
+.auth-brand .brand-icon.has-img img{height:50px;width:auto;max-width:200px;display:block;object-fit:contain}
+.logo-prev{width:150px;height:84px;border:1px dashed var(--bdr2);border-radius:var(--r);background:#fff;
+  display:flex;align-items:center;justify-content:center;color:#8a948d;font-size:12px;padding:8px}
+.logo-prev img{max-width:100%;max-height:100%;object-fit:contain}
+
+/* ══════════════════════════════════════
+   LIVE SEND TRACKER
+══════════════════════════════════════ */
+@property --p{syntax:'<number>';inherits:false;initial-value:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@keyframes popIn{0%{transform:scale(.7);opacity:.3}60%{transform:scale(1.12)}100%{transform:none;opacity:1}}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulseDot 1.2s ease-in-out infinite;margin-right:7px}
+
+.trk{display:none;border-color:var(--gold-ring)}
+.trk.show{display:block;animation:pgIn .25s ease}
+.trk-top{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.ring{--p:0;width:96px;height:96px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;
+  background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--s3) 0);transition:--p .5s ease}
+.ring::before{content:'';grid-area:1/1;width:74px;height:74px;border-radius:50%;background:var(--s1)}
+.ring span{grid-area:1/1;z-index:1;font-family:var(--font-display);font-size:21px;font-weight:700;color:var(--t1)}
+.trk-now{flex:1;min-width:220px}
+.trk-now .lbl{font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.09em;font-weight:600}
+.trk-now .who{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--t1);margin:2px 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.trk-now .em{font-size:12.5px;color:var(--t3);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:3px 12px;border-radius:100px;border:1px solid transparent}
+.stage.render{background:var(--blue-bg);color:var(--blue);border-color:rgba(91,156,246,.3)}
+.stage.send{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-bdr)}
+.stage.retry{background:var(--red-bg);color:var(--red);border-color:var(--red-bdr)}
+.stage.done{background:var(--green-bg);color:var(--green);border-color:var(--green-bdr)}
+.stage.stop{background:var(--s2);color:var(--t2);border-color:var(--bdr)}
+.trk-time{text-align:right;min-width:120px}
+.trk-time .row{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em}
+.trk-time b{display:block;font-family:var(--font-mono);font-size:19px;font-weight:500;color:var(--t1);margin-bottom:6px}
+.trk-bar{position:relative;height:10px;background:var(--s3);border-radius:100px;margin:26px 0 10px}
+.trk-fill{height:100%;width:0;border-radius:100px;position:relative;overflow:hidden;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s ease}
+.trk-fill.run::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 1.4s linear infinite}
+.trk-mail{position:absolute;top:-21px;left:0;font-size:17px;transform:translateX(-50%);transition:left .5s ease;pointer-events:none}
+.trk-cnt{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.cnt{flex:1;min-width:96px;border:1px solid var(--bdr);border-radius:10px;padding:9px 13px;background:var(--s2)}
+.cnt b{display:block;font-family:var(--font-display);font-size:23px;line-height:1.1;color:var(--t2)}
+.cnt small{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);font-weight:600}
+.cnt.ok b{color:var(--green)}.cnt.bad b{color:var(--red)}.cnt.skip b{color:var(--amber)}
+.trk-feed{margin-top:14px;background:var(--logbox);border:1px solid var(--bdr);border-radius:10px;padding:10px 13px;
+  max-height:150px;overflow-y:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.75}
+.trk-feed div{display:flex;gap:10px}
+.trk-feed .t{color:var(--t3);flex-shrink:0}
+.trk-feed .ok{color:var(--green)}.trk-feed .err{color:var(--red)}.trk-feed .warn{color:var(--amber)}.trk-feed .info{color:var(--t2)}
+.trk-foot{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.trk-hint{font-size:12px;color:var(--t3);flex:1;min-width:200px}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+.btn-danger:hover{background:rgba(240,97,92,.16)}
+
+/* per-row status pills in the dashboard table */
+td.st{white-space:nowrap}
+td.st .bdg{display:inline-flex;align-items:center;gap:6px}
+td.st .bdg.pop{animation:popIn .35s ease}
+tr.row-active td{background:var(--gold-dim)}
+
+/* floating mini tracker (visible while you are on Logs, Calendar, …) */
+#send-pill{position:fixed;left:calc(var(--sidebar) + 18px);bottom:18px;z-index:900;display:none;align-items:center;gap:12px;
+  background:var(--s1);border:1px solid var(--gold-ring);border-radius:100px;padding:8px 10px 8px 10px;
+  box-shadow:var(--shadow-pop);cursor:pointer;max-width:calc(100vw - var(--sidebar) - 36px)}
+#send-pill.show{display:flex;animation:pgIn .25s ease}
+#send-pill:hover{border-color:var(--gold)}
+.mini-ring{--p:0;width:38px;height:38px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;
+  background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--s3) 0);transition:--p .5s ease}
+.mini-ring::before{content:'';grid-area:1/1;width:29px;height:29px;border-radius:50%;background:var(--s1)}
+.mini-ring span{grid-area:1/1;z-index:1;font-size:9px;letter-spacing:-.03em;font-weight:700;color:var(--t1)}
+.pill-txt{line-height:1.25;min-width:0}
+.pill-txt b{display:block;font-size:13px;color:var(--t1);white-space:nowrap}
+.pill-txt small{display:block;font-size:11.5px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+.pill-x{background:none;border:none;color:var(--t3);font-size:17px;cursor:pointer;padding:2px 8px;border-radius:100px;display:none}
+.pill-x:hover{color:var(--t1);background:var(--s2)}
+#send-pill.done .pill-x{display:block}
+
+/* logs */
+.logs-live{display:none;align-items:center;margin-bottom:14px;padding:10px 14px;border-radius:var(--r);
+  background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green);font-size:13px;font-weight:500}
+.logs-live.show{display:flex}
+td.ts{white-space:nowrap}
+td.ts .d{color:var(--t3);margin-right:8px}
+td.ts .t{font-family:var(--font-mono);font-size:12.5px;color:var(--t1)}
+
+body{background:var(--bg);color:var(--t1);font-family:var(--font-ui);font-size:14px;min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+/* ══════════════════════════════════════
+   LOGIN OVERLAY
+══════════════════════════════════════ */
+#auth-overlay{
+  position:fixed;inset:0;z-index:9999;display:flex;
+  align-items:center;justify-content:center;padding:20px;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 60%,rgba(212,168,67,.1) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 75% 25%,rgba(63,207,114,.06) 0%,transparent 50%),
+    var(--bg);
+}
+#auth-overlay.hidden{display:none}
+
+.auth-card{
+  width:100%;max-width:400px;
+  background:var(--s1);
+  border:1px solid var(--bdr);
+  border-radius:20px;
+  padding:44px 40px 38px;
+  box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 0 1px rgba(212,168,67,.06);
+  animation:cardUp .4s cubic-bezier(.22,1,.36,1);
+}
+@keyframes cardUp{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+
+.auth-brand{text-align:center;margin-bottom:32px}
+.auth-brand .brand-icon{
+  width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,var(--s3),var(--s2));
+  border:1px solid var(--bdr2);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:28px;margin-bottom:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+  animation:iconFloat 3.5s ease-in-out infinite;
+}
+@keyframes iconFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
+.auth-brand h1{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--t1);letter-spacing:-.02em}
+.auth-brand p{font-size:12px;color:var(--t3);margin-top:5px;letter-spacing:.02em}
+
+.auth-divider{height:1px;background:var(--bdr);margin:22px 0}
+
+.afield{margin-bottom:16px}
+.afield label{display:block;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:7px}
+.afield input{
+  width:100%;padding:11px 14px;
+  background:var(--s2);border:1.5px solid var(--bdr);
+  border-radius:9px;color:var(--t1);
+  font-family:var(--font-ui);font-size:14px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.afield input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.afield input::placeholder{color:var(--t3)}
+
+.btn-login{
+  width:100%;padding:13px;margin-top:4px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:10px;
+  color:#0b0e0d;font-family:var(--font-ui);font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;letter-spacing:.01em;
+}
+.btn-login:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,168,67,.3)}
+.btn-login:active{transform:none;filter:none}
+
+.auth-msg{margin-top:14px;padding:11px 14px;border-radius:9px;font-size:13px;text-align:center;display:none}
+.auth-msg.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.auth-msg.bad{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+
+/* ══════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════ */
+#app-shell{display:none}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar);background:var(--s0);
+  border-right:1px solid var(--bdr);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:20;
+}
+.sb-logo{
+  padding:22px 18px 18px;
+  border-bottom:1px solid var(--bdr);
+  margin-bottom:10px;
+}
+.sb-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sb-logo-icon{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--gold-dim);border:1px solid var(--gold-ring);
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+}
+.sb-logo-text{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--t1);line-height:1.15}
+.sb-logo-text small{display:block;font-family:var(--font-ui);font-size:10px;font-weight:400;color:var(--t3);margin-top:2px;letter-spacing:.03em}
+.sb-user{
+  background:var(--s2);border:1px solid var(--bdr);
+  border-radius:8px;padding:8px 10px;
+  display:flex;align-items:center;gap:8px;
+}
+.sb-user-dot{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#0b0e0d;
+}
+.sb-user-email{font-size:11.5px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.sb-nav{flex:1;padding:6px 0;overflow-y:auto}
+.sb-section{
+  padding:12px 18px 3px;
+  font-size:9.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--bdr2);
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 18px;color:var(--t3);
+  cursor:pointer;border-left:2px solid transparent;
+  transition:all .14s;font-size:13.5px;font-weight:500;
+  text-decoration:none;user-select:none;
+}
+.nav-item:hover{background:var(--s2);color:var(--t1)}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim)}
+.nav-icon{font-size:15px;width:19px;text-align:center;opacity:.8}
+.nav-item.active .nav-icon{opacity:1}
+
+.sb-foot{padding:14px 18px;border-top:1px solid var(--bdr)}
+.btn-so{
+  width:100%;padding:8px 12px;
+  background:none;border:1px solid var(--bdr);
+  border-radius:8px;color:var(--t3);
+  font-family:var(--font-ui);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.btn-so:hover{border-color:var(--red-bdr);color:var(--red);background:var(--red-bg)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;padding:28px 32px;max-width:calc(100% - var(--sidebar));min-height:100vh}
+.page{display:none}
+.page.active{display:block;animation:pgIn .2s ease}
+@keyframes pgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.ph{margin-bottom:24px}
+.ph h1{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--t1);margin-bottom:3px;letter-spacing:-.02em}
+.ph p{font-size:13px;color:var(--t3)}
+
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:20px 22px;margin-bottom:16px}
+.card-ttl{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;transition:border-color .2s}
+.stat:hover{border-color:var(--bdr2)}
+.stat-n{font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:5px}
+.stat-l{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:var(--font-ui);font-size:13.5px;font-weight:500;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0e0d;font-weight:700}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-ghost{background:var(--s2);color:var(--t2);border:1px solid var(--bdr)}
+.btn-ghost:hover{border-color:var(--bdr2);color:var(--t1)}
+.btn-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.btn-green:hover{background:rgba(63,207,114,.15)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;filter:none!important}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:9px 11px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);border-bottom:1px solid var(--bdr)}
+th.sortable{cursor:pointer;user-select:none;transition:color .15s}
+th.sortable:hover{color:var(--t1)}
+th.sort-asc::after{content:' ▲';color:var(--gold);font-size:9px}
+th.sort-desc::after{content:' ▼';color:var(--gold);font-size:9px}
+td{padding:9px 11px;border-bottom:1px solid var(--bdr);color:var(--t2)}
+td strong{color:var(--t1);font-weight:500}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--s2)}
+
+/* BADGES */
+.bdg{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11.5px;font-weight:500}
+.bdg-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.bdg-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+.bdg-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr)}
+.bdg-gray{background:var(--s2);color:var(--t3);border:1px solid var(--bdr)}
+.bdg-blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(91,156,246,.25)}
+
+/* DROPZONE */
+.dropzone{border:2px dashed var(--bdr);border-radius:var(--r-lg);padding:36px;text-align:center;cursor:pointer;transition:all .2s;color:var(--t3);background:var(--s1)}
+.dropzone:hover,.dropzone.drag-over{border-color:var(--gold);color:var(--t1);background:var(--gold-dim)}
+.dz-icon{font-size:32px;margin-bottom:10px}
+.dropzone p{font-size:13.5px}
+.dropzone small{font-size:12px;color:var(--t3);margin-top:5px;display:block}
+
+/* FORM */
+.fgrp{margin-bottom:16px}
+.fgrp label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:5px;letter-spacing:.02em}
+.fgrp input,.fgrp select{width:100%;max-width:400px;padding:9px 13px;background:var(--s2);border:1px solid var(--bdr);border-radius:8px;color:var(--t1);font-family:var(--font-ui);font-size:13.5px;outline:none;transition:border-color .15s}
+.fgrp input:focus,.fgrp select:focus{border-color:var(--gold)}
+.fgrp select option{background:var(--s2)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.frow{grid-template-columns:1fr}}
+.tgl-row{display:flex;align-items:center;gap:12px}
+.tgl{width:40px;height:22px;background:var(--bdr2);border-radius:100px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;outline:none}
+.tgl.on{background:var(--green)}
+.tgl::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tgl.on::after{transform:translateX(18px)}
+.tgl-lbl{font-size:13.5px;color:var(--t2)}
+
+/* PROGRESS */
+.prog-wrap{margin-top:14px;display:none}
+.prog-txt{font-size:12.5px;color:var(--t3);margin-bottom:5px}
+.prog-bar{height:4px;background:var(--s3);border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:100px;transition:width .4s ease;width:0%}
+
+/* LOG */
+.log-box{background:#080b09;border:1px solid var(--bdr);border-radius:var(--r);padding:14px;font-family:var(--font-mono);font-size:11.5px;line-height:1.75;height:300px;overflow-y:auto;color:#5a6e5e}
+.log-box .ls{color:var(--green)}.log-box .le{color:var(--red)}.log-box .lw{color:var(--amber)}.log-box .li{color:var(--blue)}
+
+/* ══════════════════════════════════════
+   CSV TOOLBAR
+══════════════════════════════════════ */
+.csv-tb{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:180px}
+.search-wrap input{width:100%;padding:8px 13px 8px 34px;background:var(--s2);border:1px solid var(--bdr);border-radius:8px;color:var(--t1);font-family:var(--font-ui);font-size:13.5px;outline:none;transition:border-color .15s}
+.search-wrap input:focus{border-color:var(--gold)}
+.search-wrap input::placeholder{color:var(--t3)}
+.search-wrap .si{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;opacity:.45;pointer-events:none}
+.sort-pills{display:flex;gap:5px}
+.spill{padding:6px 12px;border-radius:7px;border:1px solid var(--bdr);background:var(--s2);color:var(--t3);font-family:var(--font-ui);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.spill:hover{border-color:var(--bdr2);color:var(--t1)}
+.spill.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.spill .sa{font-size:9px;opacity:.7}
+.csv-ct{font-size:12px;color:var(--t3);white-space:nowrap}
+
+/* ══════════════════════════════════════
+   CALENDAR — COMPACT & POLISHED
+══════════════════════════════════════ */
+.cal-wrap{
+  background:var(--s1);border:1px solid var(--bdr);
+  border-radius:var(--r-lg);overflow:hidden;
+  max-width:680px;   /* keeps it compact on any desktop */
+}
+.cal-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--bdr);
+  background:var(--s2);
+}
+.cal-hdr-mid{text-align:center;line-height:1.2}
+.cal-hdr-mid .mon{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--t1)}
+.cal-hdr-mid .yr{font-size:12px;color:var(--t3);margin-top:1px;display:block}
+.cal-navbtn{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--s1);border:1px solid var(--bdr);
+  color:var(--t3);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.cal-navbtn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* legend strip */
+.cal-leg{display:flex;align-items:center;gap:14px;padding:9px 20px;border-bottom:1px solid var(--bdr);background:var(--s0)}
+.cal-leg-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--t3)}
+.cal-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cal-leg-right{margin-left:auto;font-size:11.5px;color:var(--t3)}
+
+/* grid */
+.cal-body{padding:12px 16px 16px}
+.cal-wdays{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:5px}
+.cal-wday{text-align:center;font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;padding:3px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-cell{
+  border-radius:7px;border:1.5px solid transparent;
+  transition:all .16s;position:relative;
+  aspect-ratio:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1px;
+  cursor:pointer;
+}
+.cal-cell.empty{opacity:0;pointer-events:none;cursor:default}
+.cal-cell:not(.empty):hover{border-color:var(--gold);background:var(--gold-dim)}
+.cal-cell .dn{font-size:13px;font-weight:500;color:var(--t3);line-height:1}
+.cal-cell.has-bd{background:rgba(212,168,67,.09);border-color:var(--gold-ring)}
+.cal-cell.has-bd .dn{color:var(--gold);font-weight:700}
+.cal-cell.today{border-color:var(--green)!important;background:var(--green-bg)!important}
+.cal-cell.today .dn{color:var(--green)!important;font-weight:700}
+.cal-cell.has-bd.today{background:rgba(63,207,114,.1)!important}
+.cal-cell .bpill{
+  font-size:8.5px;font-weight:700;
+  background:var(--gold);color:#0b0e0d;
+  border-radius:100px;padding:0 5px;line-height:1.5;
+}
+.cal-cell.today .bpill{background:var(--green);color:#0b0e0d}
+.cal-cell .tdot{width:4px;height:4px;border-radius:50%;background:var(--green);position:absolute;bottom:4px}
+
+/* chips */
+.cal-chips-bar{display:flex;align-items:center;gap:6px;padding:10px 20px;border-top:1px solid var(--bdr);background:var(--s0);flex-wrap:wrap;min-height:0}
+.cal-chip{
+  background:var(--gold-dim);border:1px solid var(--gold-ring);
+  color:var(--gold);border-radius:100px;
+  padding:3px 10px;font-size:11.5px;font-weight:500;
+  cursor:pointer;transition:all .15s;
+}
+.cal-chip:hover{background:rgba(212,168,67,.22)}
+.cal-no-data{padding:28px;text-align:center;color:var(--t3);font-size:13.5px}
+
+/* ══════════════════════════════════════
+   MODALS
+══════════════════════════════════════ */
+.mbg{display:none;position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px}
+.mbg.open{display:flex}
+.mbox{background:var(--s1);border:1px solid var(--bdr);border-radius:20px;width:100%;max-width:720px;max-height:92vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.6);animation:cardUp .28s cubic-bezier(.22,1,.36,1)}
+.mhdr{display:flex;align-items:center;gap:10px;padding:18px 22px 14px;border-bottom:1px solid var(--bdr);position:sticky;top:0;background:var(--s1);z-index:1}
+.mhdr h2{font-family:var(--font-display);font-size:20px;font-weight:700;flex:1;color:var(--t1)}
+.mclose{background:var(--s2);border:1px solid var(--bdr);color:var(--t3);border-radius:7px;padding:4px 11px;cursor:pointer;font-size:18px;line-height:1;transition:all .15s}
+.mclose:hover{color:var(--red);border-color:var(--red-bdr)}
+.mbody{padding:22px}
+
+/* Preview frame */
+.prev-outer{border-radius:10px;overflow:hidden;border:1px solid var(--bdr);background:#f2e5b1;position:relative}
+.prev-scaler{width:677px;height:452px;transform-origin:top left}
+.prev-scaler iframe{width:677px;height:452px;border:none;display:block}
+
+/* Cal date modal hero */
+.cal-mhero{text-align:center;padding:16px 0 12px;border-bottom:1px solid var(--bdr);margin-bottom:16px}
+.cal-mhero .big-d{font-family:var(--font-display);font-size:52px;font-weight:700;color:var(--gold);line-height:1}
+.cal-mhero .mon-y{font-size:13px;color:var(--t3);margin-top:3px}
+.cal-mhero .cnt-pill{display:inline-block;background:var(--gold-dim);border:1px solid var(--gold-ring);color:var(--gold);border-radius:100px;padding:4px 14px;font-size:12.5px;font-weight:600;margin-top:9px}
+
+/* ══════════════════════════════════════
+   TEMPLATE EDITOR
+══════════════════════════════════════ */
+.tpl-editor{width:100%;height:340px;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);color:var(--t1);font-family:var(--font-mono);font-size:12.5px;padding:14px;resize:vertical;line-height:1.6;outline:none;transition:border-color .15s}
+.tpl-editor:focus{border-color:var(--gold)}
+
+/* TOAST */
+#toast{position:fixed;bottom:22px;right:22px;padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:500;display:none;z-index:9998;animation:toastIn .22s ease;max-width:300px;line-height:1.4}
+#toast.show{display:block}
+#toast.success{background:#0a1f0f;color:var(--green);border:1px solid var(--green-bdr)}
+#toast.error{background:#1f0a0a;color:var(--red);border:1px solid var(--red-bdr)}
+#toast.info{background:#0a0f1f;color:var(--blue);border:1px solid rgba(91,156,246,.3)}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media(max-width:720px){
+  :root{--sidebar:54px}
+  .sb-logo-text,.sb-user,.sb-section,.nav-item span:not(.nav-icon){display:none}
+  .sb-logo{padding:14px 10px}
+  .main{padding:20px 14px}
+  .frow{grid-template-columns:1fr}
+  .cal-wrap{max-width:100%}
+  .theme-lbl{display:none}
+  #send-pill{left:66px}
+  .trk-time{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     LOGIN
+════════════════════════════════════ -->
+<div id="auth-overlay">
+  <button class="theme-fab" onclick="toggleTheme()" title="Switch light / dark mode"><span class="theme-ico">☀️</span></button>
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="brand-icon" id="auth-brand-icon">🎂</div>
+      <h1>Birthday Wishes</h1>
+      <p>Bannari Amman Institute of Technology · Sathyamangalam</p>
+    </div>
+    <div class="afield">
+      <label>Username</label>
+      <input type="text" id="li-u" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="afield">
+      <label>Password</label>
+      <input type="password" id="li-p" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Sign In →</button>
+    <div class="auth-msg" id="li-msg"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     APP
+════════════════════════════════════ -->
+<div id="app-shell">
+  <nav class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-row">
+        <div class="sb-logo-icon" id="sb-logo-icon">🎂</div>
+        <div class="sb-logo-text">Birthday Wishes<small>BIT Admin Panel</small></div>
+      </div>
+      <div class="sb-user">
+        <div class="sb-user-dot" id="av-dot">A</div>
+        <span class="sb-user-email" id="av-name">admin</span>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Main</div>
+      <a class="nav-item active" href="#" onclick="showPage('dashboard',this)"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+      <a class="nav-item"        href="#" onclick="showPage('calendar',this)"><span class="nav-icon">📅</span><span>Calendar</span></a>
+      <div class="sb-section">Data</div>
+      <a class="nav-item"        href="#" onclick="showPage('csv',this)"><span class="nav-icon">📋</span><span>CSV Manager</span></a>
+      <a class="nav-item"        href="#" onclick="showPage('template',this)"><span class="nav-icon">🎨</span><span>Card Template</span></a>
+      <div class="sb-section">System</div>
+      <a class="nav-item"        href="#" onclick="showPage('scheduler',this)"><span class="nav-icon">⏰</span><span>Scheduler</span></a>
+      <a class="nav-item"        href="#" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span><span>Settings</span></a>
+      <a class="nav-item"        href="#" onclick="showPage('logs',this)"><span class="nav-icon">📜</span><span>Logs</span></a>
+    </div>
+    <div class="sb-foot">
+      <button class="btn-so btn-theme" style="margin-bottom:8px" onclick="toggleTheme()" title="Switch light / dark mode"><span class="theme-ico">☀️</span><span class="theme-lbl">Light mode</span></button>
+      <button class="btn-so" onclick="doLogout()"><span>↩</span><span>Sign out</span></button>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ─── DASHBOARD ─── -->
+    <div id="page-dashboard" class="page active">
+      <div class="ph"><h1>Today's Birthdays</h1><p id="dash-date">—</p></div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-n" id="s-matches">—</div><div class="stat-l">Birthdays Today</div></div>
+        <div class="stat"><div class="stat-n" id="s-total">—</div><div class="stat-l">Total Students</div></div>
+      </div>
+      <!-- LIVE SEND TRACKER -->
+      <div class="card trk" id="trk">
+        <div class="card-ttl" style="margin-bottom:16px">
+          <span id="trk-title">Sending birthday wishes…</span>
+          <div style="margin-left:auto;display:flex;gap:7px">
+            <button class="btn btn-danger" id="trk-stop" onclick="stopSend()" style="font-size:12.5px;padding:6px 13px">■ Stop</button>
+            <button class="btn btn-ghost" id="trk-dismiss" onclick="dismissTracker()" style="font-size:12.5px;padding:6px 13px;display:none">✕ Dismiss</button>
+          </div>
+        </div>
+        <div class="trk-top">
+          <div class="ring" id="trk-ring"><span id="trk-pct">0%</span></div>
+          <div class="trk-now">
+            <div class="lbl" id="trk-lbl">Now sending</div>
+            <div class="who" id="trk-who">Starting…</div>
+            <div class="em" id="trk-em"></div>
+            <span class="stage render" id="trk-stage"><span class="spin"></span>Getting ready…</span>
+          </div>
+          <div class="trk-time">
+            <div class="row">Elapsed</div><b id="trk-elapsed">00:00</b>
+            <div class="row" id="trk-eta-l">Time left</div><b id="trk-eta">—</b>
+          </div>
+        </div>
+        <div class="trk-bar"><div class="trk-mail" id="trk-mail">✉️</div><div class="trk-fill run" id="trk-fill"></div></div>
+        <div class="trk-cnt">
+          <div class="cnt ok"><b id="c-sent">0</b><small>✓ Sent</small></div>
+          <div class="cnt bad"><b id="c-fail">0</b><small>✕ Failed</small></div>
+          <div class="cnt skip"><b id="c-skip">0</b><small>↷ Skipped</small></div>
+          <div class="cnt"><b id="c-left">0</b><small id="c-left-l">Remaining</small></div>
+        </div>
+        <div class="trk-feed" id="trk-feed"></div>
+        <div class="trk-foot"><span class="trk-hint" id="trk-hint">You can switch to other pages — progress stays visible in the corner.</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-ttl">
+          🎂 Birthday Matches
+          <div style="margin-left:auto;display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn btn-green" onclick="downloadTodayPDF()" style="font-size:12.5px;padding:7px 13px">⬇ PDF</button>
+            <button class="btn btn-primary" id="btn-send" onclick="confirmSend()" disabled>🚀 Send Wishes</button>
+            <button class="btn btn-ghost" onclick="loadDashboard()">↻</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Name</th><th>Email</th><th>DOB</th><th>Status</th><th>Preview</th></tr></thead>
+            <tbody id="dash-tbody"><tr><td colspan="6" style="color:var(--t3);text-align:center;padding:28px">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CALENDAR ─── -->
+    <div id="page-calendar" class="page">
+      <div class="ph"><h1>Birthday Calendar</h1><p>Click any highlighted date to view students and download a PDF report.</p></div>
+      <div class="cal-wrap">
+        <div class="cal-hdr">
+          <button class="cal-navbtn" onclick="calPrev()" title="Previous month">‹</button>
+          <div class="cal-hdr-mid">
+            <span class="mon" id="cal-mon">—</span>
+            <span class="yr" id="cal-yr">—</span>
+          </div>
+          <button class="cal-navbtn" onclick="calNext()" title="Next month">›</button>
+        </div>
+        <div class="cal-leg">
+          <span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--gold)"></span>Has birthday</span>
+          <span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--green)"></span>Today</span>
+          <span class="cal-leg-right" id="cal-month-total"></span>
+        </div>
+        <div class="cal-body">
+          <div class="cal-wdays" id="cal-wdays"></div>
+          <div class="cal-days" id="cal-days"></div>
+          <div id="cal-nodata" class="cal-no-data" style="display:none">No birthdays recorded for this month.</div>
+        </div>
+        <div class="cal-chips-bar" id="cal-chips-bar" style="display:none">
+          <span style="font-size:11px;color:var(--t3);flex-shrink:0">Jump to date →</span>
+          <div id="cal-chips" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CSV MANAGER ─── -->
+    <div id="page-csv" class="page">
+      <div class="ph"><h1>CSV Manager</h1><p>Upload student data. Columns: <code style="color:var(--gold);background:var(--s2);padding:1px 6px;border-radius:4px;font-size:12px">name, email, dob</code> — DOB format: DD-MM-YYYY</p></div>
+
+      <div class="card">
+        <div class="card-ttl">📤 Upload CSV</div>
+        <div class="dropzone" id="dropzone"
+             onclick="document.getElementById('csv-inp').click()"
+             ondragover="event.preventDefault();this.classList.add('drag-over')"
+             ondragleave="this.classList.remove('drag-over')"
+             ondrop="handleDrop(event)">
+          <div class="dz-icon">📄</div>
+          <p>Click to upload or drag &amp; drop your CSV</p>
+          <small>Uploading replaces all existing student records</small>
+        </div>
+        <input type="file" id="csv-inp" accept=".csv" style="display:none" onchange="uploadCSV(this.files[0])">
+      </div>
+
+      <!-- Error rows — shown ONLY if there are errors -->
+      <div class="card" id="err-card" style="display:none">
+        <div class="card-ttl" style="color:var(--red)">⚠️ Import Errors
+          <span id="err-count" style="font-size:12.5px;font-family:var(--font-ui);font-weight:400;color:var(--t3);margin-left:4px"></span>
+        </div>
+        <div class="tbl-wrap" id="err-tbl"></div>
+      </div>
+
+      <!-- All students with search + sort -->
+      <div class="card">
+        <div class="card-ttl">
+          👥 All Students
+          <span id="csv-ct" style="font-size:12px;color:var(--t3);font-family:var(--font-ui);font-weight:400;margin-left:4px"></span>
+        </div>
+        <div class="csv-tb">
+          <div class="search-wrap">
+            <span class="si">🔍</span>
+            <input type="text" id="csv-q" placeholder="Search name, email or DOB…" oninput="renderTable()">
+          </div>
+          <div class="sort-pills">
+            <button class="spill" id="sp-name" onclick="setSort('name')">Name <span class="sa" id="sa-name">↕</span></button>
+            <button class="spill" id="sp-dob"  onclick="setSort('dob')">DOB <span class="sa" id="sa-dob">↕</span></button>
+            <button class="spill" id="sp-email" onclick="setSort('email')">Email <span class="sa" id="sa-email">↕</span></button>
+          </div>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 11px" onclick="clearQ()">✕ Clear</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="sortable" onclick="setSort('name')">Name</th>
+                <th class="sortable" onclick="setSort('email')">Email</th>
+                <th class="sortable" onclick="setSort('dob')">DOB</th>
+                <th>Month</th>
+              </tr>
+            </thead>
+            <tbody id="stud-tbody"><tr><td colspan="5" style="color:var(--t3);text-align:center;padding:24px">Loading…</td></tr></tbody>
+          </table>
+        </div>
+        <div id="no-res" style="display:none;padding:22px;text-align:center;color:var(--t3);font-size:13.5px">No students match your search.</div>
+      </div>
+    </div>
+
+    <!-- ─── CARD TEMPLATE ─── -->
+    <div id="page-template" class="page">
+      <div class="ph"><h1>Card Template</h1><p>Upload your HTML birthday card. Use <code style="color:var(--gold);background:var(--s2);padding:1px 6px;border-radius:4px;font-size:12px">{{name}}</code> as the name placeholder.</p></div>
+      <div class="card">
+        <div class="card-ttl">📁 Upload Template File</div>
+        <p style="font-size:13px;color:var(--t3);margin-bottom:14px">Upload a self-contained HTML file — embed all images as base64 data URIs so they render correctly as screenshots.</p>
+        <input type="file" id="tpl-inp" accept=".html,.htm" style="display:none" onchange="uploadTplFile(this.files[0])">
+        <button class="btn btn-primary" onclick="document.getElementById('tpl-inp').click()">📁 Upload Template File</button>
+        <span style="margin-left:10px;font-size:13px;color:var(--t3)">or edit directly below</span>
+      </div>
+      <div class="card">
+        <div class="card-ttl">✏️ HTML Editor</div>
+        <textarea id="tpl-ed" class="tpl-editor" placeholder="Loading template…"></textarea>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveTpl()">💾 Save</button>
+          <button class="btn btn-ghost"   onclick="loadTpl()">↩ Reload</button>
+        </div>
+        <div id="tpl-msg" style="margin-top:10px;font-size:13px"></div>
+      </div>
+    </div>
+
+    <!-- ─── SCHEDULER ─── -->
+    <div id="page-scheduler" class="page">
+      <div class="ph"><h1>Scheduler</h1><p>Set a daily time — birthday wishes are sent automatically at this time every day.</p></div>
+      <div class="card">
+        <div class="card-ttl">⏰ Daily Auto-Send</div>
+        <div class="fgrp">
+          <label>Auto-send</label>
+          <div class="tgl-row">
+            <button class="tgl" id="atgl" onclick="toggleAuto()"></button>
+            <span class="tgl-lbl" id="atgl-lbl">Disabled</span>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgrp"><label>Send Time (24h)</label><input type="time" id="sch-t" value="08:00"></div>
+          <div class="fgrp">
+            <label>Timezone</label>
+            <select id="sch-tz">
+              <option value="Asia/Kolkata">Asia/Kolkata (IST +5:30)</option>
+              <option value="UTC">UTC</option>
+              <option value="America/New_York">America/New_York (EST)</option>
+              <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
+              <option value="Europe/London">Europe/London (GMT)</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="saveSched()">💾 Save Schedule</button></div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr)">
+          <div style="font-size:12px;color:var(--t3);margin-bottom:4px">Next scheduled run</div>
+          <div style="font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--gold2)" id="nxt-run">Not scheduled</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SETTINGS ─── -->
+    <div id="page-settings" class="page">
+      <div class="ph"><h1>Settings</h1><p>Gmail SMTP configuration for outgoing birthday emails.</p></div>
+      <div class="card">
+        <div class="card-ttl">📧 Email / SMTP</div>
+        <div class="frow">
+          <div class="fgrp"><label>SMTP Server</label><input type="text" id="st-smtp" placeholder="smtp.gmail.com"></div>
+          <div class="fgrp"><label>Port</label><input type="number" id="st-port" placeholder="587"></div>
+        </div>
+        <div class="fgrp"><label>Sender Email</label><input type="email" id="st-email" placeholder="yourname@gmail.com"></div>
+        <div class="fgrp">
+          <label>Gmail App Password &nbsp;<a href="https://myaccount.google.com/apppasswords" target="_blank" style="color:var(--gold);text-decoration:none;font-size:11px">generate ↗</a></label>
+          <input type="password" id="st-apw" placeholder="Leave blank to keep current" autocomplete="new-password">
+          <div id="pw-note" style="font-size:12px;color:var(--green);margin-top:4px;display:none">✅ App password configured</div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button></div>
+        <div id="st-msg" style="margin-top:10px;font-size:13px"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-ttl">🏫 College Logo</div>
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+          <div class="logo-prev" id="logo-prev"><span>No logo yet</span></div>
+          <div style="flex:1;min-width:240px">
+            <p style="font-size:13px;color:var(--t2);max-width:440px;line-height:1.6">Appears in the sidebar, on the login screen and at the top of every PDF report. PNG or JPG, up to 3&nbsp;MB — a wide logo with a transparent background looks best.</p>
+            <div class="btn-row">
+              <button class="btn btn-primary" onclick="document.getElementById('logo-inp').click()">⬆ Upload logo</button>
+              <button class="btn btn-green" onclick="window.open('/api/report/today/pdf','_blank')">📄 Preview PDF header</button>
+              <button class="btn btn-ghost" id="logo-del" onclick="deleteLogo()" style="display:none">Remove</button>
+            </div>
+            <input type="file" id="logo-inp" accept=".png,.jpg,.jpeg,image/png,image/jpeg" style="display:none" onchange="uploadLogo(this.files[0]);this.value=''">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── LOGS ─── -->
+    <div id="page-logs" class="page">
+      <div class="ph"><h1>Activity Logs</h1><p>Send history — times shown to the second.</p></div>
+      <div class="logs-live" id="logs-live"><span class="live-dot"></span><span id="logs-live-txt">Sending in progress…</span></div>
+      <div class="card">
+        <div class="card-ttl" style="justify-content:space-between">
+          📜 Sent Log
+          <button class="btn btn-ghost" style="font-size:12px;padding:5px 12px" onclick="loadLogs()">↺ Refresh</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Timestamp</th><th>Name</th><th>Email</th><th>Status</th><th>Error</th></tr></thead>
+            <tbody id="log-tbody"><tr><td colspan="5" style="color:var(--t3);text-align:center;padding:24px">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══ PREVIEW MODAL ══ -->
+<div class="mbg" id="prev-modal">
+  <div class="mbox">
+    <div class="mhdr">
+      <h2 id="prev-title">Card Preview</h2>
+      <button class="mclose" onclick="closePrev()">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="prev-outer" id="prev-outer">
+        <div class="prev-scaler" id="prev-scaler">
+          <iframe id="prev-iframe" sandbox="allow-same-origin allow-scripts" scrolling="no"></iframe>
+        </div>
+      </div>
+      <p style="font-size:11.5px;color:var(--t3);margin-top:9px">Rendered at native 677×452 px, scaled to fit. Email sends this as an inline PNG — identical on all clients.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR DATE MODAL ══ -->
+<div class="mbg" id="cal-modal">
+  <div class="mbox" style="max-width:600px">
+    <div class="mhdr">
+      <h2 id="cal-m-title">—</h2>
+      <button class="btn btn-green" id="cal-pdf-btn" style="font-size:12.5px;padding:6px 13px">⬇ PDF</button>
+      <button class="mclose" onclick="document.getElementById('cal-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="cal-mhero">
+        <div class="big-d" id="cm-day">—</div>
+        <div class="mon-y" id="cm-my">—</div>
+        <div class="cnt-pill" id="cm-cnt">—</div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Name</th><th>Email</th><th>DOB</th></tr></thead>
+          <tbody id="cm-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- floating send progress (shown on pages other than Dashboard) -->
+<div id="send-pill" onclick="goDashboard()" title="Back to dashboard">
+  <div class="mini-ring" id="pill-ring"><span id="pill-pct">0%</span></div>
+  <div class="pill-txt"><b id="pill-main">Sending wishes…</b><small id="pill-sub"></small></div>
+  <button class="pill-x" onclick="event.stopPropagation();dismissTracker()" title="Dismiss">✕</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════ BOOT ═══════════════════════ */
+(async()=>{
+  const {ok,data}=await api('/api/auth/status');
+  if(ok)applyLogo(data.logo);
+  if(ok&&data.logged_in){
+    document.getElementById('auth-overlay').classList.add('hidden');
+    document.getElementById('app-shell').style.display='flex';
+    const u=data.username||'admin';
+    document.getElementById('av-dot').textContent=u[0].toUpperCase();
+    document.getElementById('av-name').textContent=u;
+    initApp();
+  }
+})();
+
+/* ═══════════════════════ API ═══════════════════════ */
+async function api(path,opts={}){
+  const h={'Content-Type':'application/json',...(opts.headers||{})};
+  try{
+    const r=await fetch(path,{...opts,headers:h});
+    const d=await r.json().catch(()=>({}));
+    return{ok:r.ok,status:r.status,data:d};
+  }catch(e){return{ok:false,status:0,data:{error:e.message}};}
+}
+async function apiFm(path,fd){
+  try{
+    const r=await fetch(path,{method:'POST',body:fd});
+    const d=await r.json().catch(()=>({}));
+    return{ok:r.ok,data:d};
+  }catch(e){return{ok:false,data:{error:e.message}};}
+}
+
+/* ═══════════════════════ TOAST ═══════════════════════ */
+function toast(msg,type='info'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='show '+type;
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3800);
+}
+
+/* ═══════════════════════ AUTH ═══════════════════════ */
+async function doLogin(){
+  const u=document.getElementById('li-u').value.trim();
+  const p=document.getElementById('li-p').value;
+  const msg=document.getElementById('li-msg');
+  if(!u||!p){msg.textContent='Enter username and password.';msg.className='auth-msg bad';msg.style.display='block';return;}
+  const{ok,data}=await api('/api/login',{method:'POST',body:JSON.stringify({username:u,password:p})});
+  if(!ok){msg.textContent=data.error||'Incorrect credentials.';msg.className='auth-msg bad';msg.style.display='block';return;}
+  msg.textContent='✅ Signing in…';msg.className='auth-msg ok';msg.style.display='block';
+  setTimeout(()=>location.reload(),500);
+}
+async function doLogout(){await api('/api/logout',{method:'POST'});location.reload();}
+
+/* ═══════════════════════ INIT ═══════════════════════ */
+function initApp(){
+  loadDashboard();loadSettings();loadScheduler();loadTpl();loadStudents();loadLogs();calInit();
+  resumeSend();
+}
+
+/* ═══════════════════════ NAV ═══════════════════════ */
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  if(id==='dashboard')loadDashboard();
+  if(id==='calendar')renderCal();
+  if(id==='csv')loadStudents();
+  if(id==='template')loadTpl();
+  if(id==='settings')loadSettings();
+  if(id==='scheduler')loadScheduler();
+  if(id==='logs')loadLogs();
+  updatePillVisibility();
+  return false;
+}
+
+/* ═══════════════════════ DASHBOARD ═══════════════════════ */
+let _matches=[];
+async function loadDashboard(){
+  document.getElementById('dash-date').textContent=
+    new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const{ok,data}=await api('/api/dashboard');
+  if(!ok){
+    document.getElementById('dash-tbody').innerHTML=
+      `<tr><td colspan="6" style="color:var(--t3);text-align:center;padding:28px">${esc(data.error||'No CSV uploaded yet.')}</td></tr>`;
+    ['s-matches','s-total'].forEach(i=>document.getElementById(i).textContent='—');
+    document.getElementById('btn-send').disabled=true;return;
+  }
+  _matches=data.matches||[];
+  document.getElementById('s-matches').textContent=data.count;
+  document.getElementById('s-total').textContent=data.total_students||'—';
+  const tb=document.getElementById('dash-tbody');
+  if(!_matches.length){
+    tb.innerHTML=`<tr><td colspan="6" style="color:var(--t3);text-align:center;padding:28px">No birthdays today 🎉</td></tr>`;
+    document.getElementById('btn-send').disabled=true;return;
+  }
+  document.getElementById('btn-send').disabled=_trk.running;
+  tb.innerHTML=_matches.map((m,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><strong>${esc(m.name)}</strong></td>
+      <td style="color:var(--t3)">${esc(m.email)}</td>
+      <td>${esc(m.dob)}</td>
+      <td class="st" data-id="${m.id}"><span class="bdg bdg-gray">—</span></td>
+      <td><button class="btn btn-ghost" style="padding:4px 11px;font-size:12px"
+            onclick="openPrev(${m.id},'${esc(m.name)}')">👁 Preview</button></td>
+    </tr>`).join('');
+  _trk.rowSt={};            // table was rebuilt → repaint every status cell
+  applyRowStatuses(_trk.last);
+}
+async function downloadTodayPDF(){window.open('/api/report/today/pdf','_blank');}
+function confirmSend(){
+  if(!_matches.length)return toast('No birthday matches.','error');
+  const shown=_matches.slice(0,8).map(m=>m.name).join(', ');
+  const more=_matches.length>8?` … and ${_matches.length-8} more`:'';
+  if(!confirm(`Send birthday wishes to ${_matches.length} student(s)?\n\n${shown}${more}\n\nEmails are sent as inline PNG images. You can watch progress here, or on any page.`))return;
+  triggerSend();
+}
+
+/* ═══════════════════════ LIVE SEND TRACKER ═══════════════════════ */
+const _trk={running:false,poll:null,tick:null,last:null,t0:0,eta:null,etaAt:0,n:0,rowSt:{}};
+
+async function triggerSend(){
+  const btn=document.getElementById('btn-send');
+  btn.disabled=true;
+  const{ok,data}=await api('/api/send',{method:'POST'});
+  if(!ok){toast(data.error||'Send failed.','error');btn.disabled=!_matches.length;return;}
+  if(!data.total){toast(data.message||'Nothing to send.','info');btn.disabled=!_matches.length;return;}
+  toast(data.message||'Sending…','info');
+  _trk.running=true;_trk.last=null;_trk.rowSt={};_trk.n=0;
+  startTracking();
+}
+async function resumeSend(){            // page reload while a job is running
+  const{ok,data:s}=await api('/api/send/status');
+  if(ok&&s.running){_trk.running=true;startTracking();}
+}
+function startTracking(){
+  if(_trk.poll)return;
+  pollSend();
+  _trk.poll=setInterval(pollSend,1000);
+  _trk.tick=setInterval(tickClock,500);
+}
+function stopTracking(){
+  clearInterval(_trk.poll);clearInterval(_trk.tick);_trk.poll=_trk.tick=null;
+}
+async function pollSend(){
+  const{ok,data:s}=await api('/api/send/status');
+  if(!ok)return;
+  if(!s.running&&!s.started_at){stopTracking();_trk.running=false;return;}
+  const wasRunning=_trk.running;
+  _trk.running=s.running;_trk.last=s;
+  renderTracker(s);
+  if(document.getElementById('page-logs').classList.contains('active')&&(++_trk.n%2===0))loadLogs();
+  if(!s.running){
+    stopTracking();
+    if(wasRunning)onSendFinished(s);
+  }
+}
+function tickClock(){
+  const s=_trk.last;if(!s||!_trk.running)return;
+  const el=(Date.now()-_trk.t0)/1000;
+  document.getElementById('trk-elapsed').textContent=fmtDur(el);
+  const eta=document.getElementById('trk-eta');
+  if(_trk.eta==null)eta.textContent='calculating…';
+  else eta.textContent='~'+fmtDur(_trk.eta-(Date.now()-_trk.etaAt)/1000);
+}
+function fmtDur(sec){
+  sec=Math.max(0,Math.round(sec));
+  const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),x=sec%60,p=n=>String(n).padStart(2,'0');
+  return h?`${h}:${p(m)}:${p(x)}`:`${p(m)}:${p(x)}`;
+}
+const STAGES={
+  rendering:['render','Preparing card…'],
+  sending:['send','Sending email…'],
+  retrying:['retry','Retrying…']
+};
+function renderTracker(s){
+  const total=s.total||0,done=s.progress||0,c=s.counts||{};
+  const pct=total?Math.round(done/total*100):0;
+  const card=document.getElementById('trk');
+  card.classList.add('show');
+  _trk.t0=Date.now()-(s.elapsed||0)*1000;
+  _trk.eta=s.eta;_trk.etaAt=Date.now();
+
+  // title + buttons
+  const stopped=!s.running&&(c.cancelled>0);
+  document.getElementById('trk-title').textContent=
+    s.running?`Sending birthday wishes… ${done} of ${total}`:
+    s.error?'Run aborted':stopped?'Stopped':'All done';
+  document.getElementById('trk-stop').style.display=s.running?'':'none';
+  document.getElementById('trk-stop').disabled=!!s.cancel;
+  document.getElementById('trk-stop').textContent=s.cancel?'Stopping…':'■ Stop';
+  document.getElementById('trk-dismiss').style.display=s.running?'none':'';
+
+  // ring + bar + envelope
+  document.getElementById('trk-ring').style.setProperty('--p',pct);
+  document.getElementById('trk-pct').textContent=pct+'%';
+  const fill=document.getElementById('trk-fill');
+  fill.style.width=pct+'%';fill.classList.toggle('run',!!s.running);
+  const mail=document.getElementById('trk-mail');
+  mail.style.left=Math.min(98,Math.max(2,pct))+'%';
+  mail.textContent=s.running?'✉️':(c.failed?'⚠️':'🎉');
+
+  // who / stage
+  const cur=s.current,stg=document.getElementById('trk-stage');
+  document.getElementById('trk-lbl').textContent=s.running?'Now sending':'Summary';
+  if(s.running&&cur){
+    document.getElementById('trk-who').textContent=cur.name;
+    document.getElementById('trk-em').textContent=cur.email;
+    const[cls,txt]=STAGES[cur.stage]||['render','Working…'];
+    stg.className='stage '+cls;
+    stg.innerHTML=`<span class="spin"></span>${txt}${cur.detail?' ('+esc(cur.detail)+')':''}`;
+  }else if(s.running){
+    document.getElementById('trk-who').textContent=done?'Next recipient…':'Starting…';
+    document.getElementById('trk-em').textContent='';
+    stg.className='stage render';stg.innerHTML='<span class="spin"></span>Getting ready…';
+  }else{
+    document.getElementById('trk-who').textContent=`${c.sent||0} of ${total} wishes delivered`;
+    document.getElementById('trk-em').textContent=s.error?s.error:'';
+    stg.className='stage '+(s.error||c.failed?'retry':stopped?'stop':'done');
+    stg.textContent=s.error?'✕ Aborted':stopped?'■ Stopped':c.failed?'Finished with errors':'✓ Completed';
+  }
+
+  // counters
+  document.getElementById('c-sent').textContent=c.sent||0;
+  document.getElementById('c-fail').textContent=c.failed||0;
+  document.getElementById('c-skip').textContent=c.skipped||0;
+  document.getElementById('c-left').textContent=s.running?Math.max(0,total-done):(c.cancelled||0);
+  document.getElementById('c-left-l').textContent=s.running?'Remaining':'Not sent';
+
+  // clock (static values when finished)
+  if(!s.running){
+    document.getElementById('trk-elapsed').textContent=fmtDur(s.elapsed||0);
+    document.getElementById('trk-eta').textContent='—';
+    document.getElementById('trk-eta-l').textContent='Time left';
+  }else tickClock();
+
+  // live feed (newest first)
+  const feed=document.getElementById('trk-feed');
+  feed.innerHTML=(s.events||[]).slice().reverse()
+    .map(e=>`<div class="${e.kind}"><span class="t">${esc(e.t)}</span><span>${esc(e.text)}</span></div>`).join('');
+
+  // hint
+  document.getElementById('trk-hint').textContent=
+    s.running?'You can switch to other pages — progress stays visible in the corner.':
+    c.failed||c.cancelled?'Press “Send Wishes” again to retry — students already sent today are skipped.':
+    'Every email is also recorded in Logs with its exact time.';
+
+  // header button + row statuses + page extras
+  document.getElementById('btn-send').disabled=!!s.running||!_matches.length;
+  document.getElementById('btn-send').textContent=s.running?'⏳ Sending…':'🚀 Send Wishes';
+  applyRowStatuses(s);
+  document.title=s.running?`(${done}/${total}) BIT Birthday Wishes`:'BIT Birthday Wishes';
+  renderPill(s,pct);
+  const live=document.getElementById('logs-live');
+  live.classList.toggle('show',!!s.running);
+  document.getElementById('logs-live-txt').textContent=
+    `Live — sending ${done} of ${total}${cur?' · now: '+cur.name:''}`;
+}
+function applyRowStatuses(s){
+  const map={};
+  (s&&s.items||[]).forEach(i=>map[i.id]=i);
+  document.querySelectorAll('#dash-tbody td.st').forEach(td=>{
+    const id=td.dataset.id,it=map[id];
+    const tr=td.parentElement;
+    const key=it?it.status+'|'+(it.detail||'')+'|'+(it.duration||''):'none';
+    tr.classList.toggle('row-active',!!it&&(it.status==='rendering'||it.status==='sending'||it.status==='retrying'));
+    if(_trk.rowSt[id]===key)return;
+    const changed=_trk.rowSt[id]!==undefined;
+    _trk.rowSt[id]=key;
+    let h;
+    if(!it)h='<span class="bdg bdg-gray">—</span>';
+    else switch(it.status){
+      case'pending':   h='<span class="bdg bdg-gray">Waiting</span>';break;
+      case'rendering': h='<span class="bdg bdg-blue"><span class="spin"></span>Preparing</span>';break;
+      case'sending':   h='<span class="bdg bdg-amber"><span class="spin"></span>Sending</span>';break;
+      case'retrying':  h=`<span class="bdg bdg-red"><span class="spin"></span>Retry ${esc(it.detail||'')}</span>`;break;
+      case'sent':      h=`<span class="bdg bdg-green">✓ Sent${it.duration?' · '+it.duration+'s':''}</span>`;break;
+      case'skipped':   h='<span class="bdg bdg-amber">↷ Skipped</span>';break;
+      case'failed':    h=`<span class="bdg bdg-red" title="${esc(it.error||'')}">✕ Failed</span>`;break;
+      default:         h='<span class="bdg bdg-gray">Not sent</span>';
+    }
+    td.innerHTML=h;
+    if(changed)td.firstElementChild.classList.add('pop');
+  });
+}
+function renderPill(s,pct){
+  const pill=document.getElementById('send-pill');
+  document.getElementById('pill-ring').style.setProperty('--p',pct);
+  document.getElementById('pill-pct').textContent=pct+'%';
+  const c=s.counts||{};
+  if(s.running){
+    pill.classList.remove('done');
+    document.getElementById('pill-main').textContent=`Sending wishes · ${s.progress}/${s.total}`;
+    document.getElementById('pill-sub').textContent=
+      (s.current?'Now: '+s.current.name+' · ':'')+fmtDur(s.elapsed||0);
+  }else{
+    pill.classList.add('done');
+    document.getElementById('pill-main').textContent=s.error?'Run aborted':`Done · ${c.sent||0} sent`;
+    document.getElementById('pill-sub').textContent=
+      (c.failed?c.failed+' failed · ':'')+'click to view';
+  }
+  pill.dataset.active='1';
+  updatePillVisibility();
+}
+function updatePillVisibility(){
+  const pill=document.getElementById('send-pill');
+  const onDash=document.getElementById('page-dashboard').classList.contains('active');
+  pill.classList.toggle('show',pill.dataset.active==='1'&&!onDash);
+}
+function goDashboard(){
+  const el=document.querySelector('.nav-item');   // first item = Dashboard
+  showPage('dashboard',el);
+}
+async function stopSend(){
+  if(!confirm('Stop sending? The email being sent right now will finish; the rest will not be sent.'))return;
+  const{ok,data}=await api('/api/send/cancel',{method:'POST'});
+  toast(ok?'Stopping after the current email…':(data.error||'Could not stop.'),ok?'info':'error');
+}
+function onSendFinished(s){
+  const c=s.counts||{};
+  toast(s.error?`❌ Aborted: ${s.error}`:
+        c.cancelled?`■ Stopped — ${c.sent||0} sent, ${c.cancelled} not sent`:
+        `${c.failed?'⚠️':'✅'} ${c.sent||0} sent${c.failed?', '+c.failed+' failed':''}${c.skipped?', '+c.skipped+' skipped':''}`,
+        s.error||c.failed?'error':'success');
+  loadLogs();
+}
+function dismissTracker(){
+  document.getElementById('trk').classList.remove('show');
+  const pill=document.getElementById('send-pill');pill.dataset.active='0';updatePillVisibility();
+  document.getElementById('logs-live').classList.remove('show');
+  _trk.last=null;_trk.rowSt={};applyRowStatuses(null);
+  document.title='BIT Birthday Wishes';
+}
+
+/* ═══════════════════════ PREVIEW MODAL ═══════════════════════ */
+const CW=677,CH=452;
+async function openPrev(sid,name){
+  const{ok,data}=await api(`/api/template/preview/${sid}`);
+  if(!ok||!data.html)return toast(data.error||'No template uploaded yet.','error');
+  const ifr=document.getElementById('prev-iframe');
+  const d=ifr.contentDocument||ifr.contentWindow.document;
+  d.open();d.write(data.html);d.close();
+  document.getElementById('prev-title').textContent=`Preview — ${name}`;
+  document.getElementById('prev-modal').classList.add('open');
+  fitPrev();
+}
+function closePrev(){document.getElementById('prev-modal').classList.remove('open');}
+function fitPrev(){
+  const o=document.getElementById('prev-outer');
+  const s=document.getElementById('prev-scaler');
+  const w=o.clientWidth||680;
+  const sc=Math.min(1,w/CW);
+  s.style.transform=`scale(${sc})`;
+  o.style.height=Math.round(CH*sc)+'px';
+}
+window.addEventListener('resize',fitPrev);
+
+/* ═══════════════════════ CALENDAR ═══════════════════════ */
+const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DS=['Su','Mo','Tu','We','Th','Fr','Sa'];
+let cY=new Date().getFullYear(),cM=new Date().getMonth()+1,cData={};
+
+function calInit(){renderCal();}
+async function calPrev(){cM--;if(cM<1){cM=12;cY--;}await renderCal();}
+async function calNext(){cM++;if(cM>12){cM=1;cY++;}await renderCal();}
+
+async function renderCal(){
+  document.getElementById('cal-mon').textContent=MN[cM-1];
+  document.getElementById('cal-yr').textContent=cY;
+
+  const{ok,data}=await api(`/api/calendar/${cM}`);
+  cData=ok?data:{};
+
+  const tot=Object.values(cData).reduce((s,a)=>s+a.length,0);
+  document.getElementById('cal-month-total').textContent=
+    tot?`🎂 ${tot} birthday${tot>1?'s':''} this month`:'';
+
+  // Weekday row
+  document.getElementById('cal-wdays').innerHTML=DS.map(d=>`<div class="cal-wday">${d}</div>`).join('');
+
+  // Day grid
+  const first=new Date(cY,cM-1,1).getDay();
+  const dim=new Date(cY,cM,0).getDate();
+  const today=new Date();
+  const thisM=cM===today.getMonth()+1&&cY===today.getFullYear();
+  let html='';
+  for(let i=0;i<first;i++)html+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const k=String(d);
+    const bd=cData[k]&&cData[k].length>0;
+    const cnt=bd?cData[k].length:0;
+    const isTd=thisM&&d===today.getDate();
+    const cls=['cal-cell',bd?'has-bd':'',isTd?'today':''].filter(Boolean).join(' ');
+    const tip=bd?`${cnt} birthday${cnt>1?'s':''} · ${d} ${MS[cM-1]}`:`${d} ${MS[cM-1]}`;
+    html+=`<div class="${cls}" onclick="openCalDay(${d},${cM})" title="${tip}">
+      <span class="dn">${d}</span>
+      ${bd?`<span class="bpill">${cnt}</span>`:''}
+      ${isTd&&!bd?`<span class="tdot"></span>`:''}
+    </div>`;
+  }
+  document.getElementById('cal-days').innerHTML=html;
+  document.getElementById('cal-nodata').style.display=(!tot)?'':'none';
+
+  // Quick-jump chips
+  const cb=document.getElementById('cal-chips-bar');
+  const cc=document.getElementById('cal-chips');
+  if(tot>0){
+    cb.style.display='';
+    cc.innerHTML=Object.keys(cData).map(Number).sort((a,b)=>a-b).map(d=>{
+      const n=cData[String(d)].length;
+      return `<span class="cal-chip" onclick="openCalDay(${d},${cM})">${d} ${MS[cM-1]} · ${n}</span>`;
+    }).join('');
+  }else{cb.style.display='none';}
+}
+
+function openCalDay(d,m){
+  const sts=cData[String(d)]||[];
+  document.getElementById('cm-day').textContent=d;
+  document.getElementById('cm-my').textContent=`${MN[m-1]} ${cY}`;
+  document.getElementById('cm-cnt').textContent=
+    sts.length?`${sts.length} Birthday${sts.length>1?'s':''}`:'No birthdays';
+  document.getElementById('cal-m-title').textContent=`${d} ${MN[m-1]}`;
+  document.getElementById('cal-pdf-btn').onclick=()=>window.open(`/api/calendar/pdf/${d}/${m}`,'_blank');
+  document.getElementById('cm-tbody').innerHTML=sts.length
+    ?sts.map((s,i)=>`<tr><td>${i+1}</td><td><strong>${esc(s.name)}</strong></td><td style="color:var(--t3)">${esc(s.email)}</td><td>${esc(s.dob)}</td></tr>`).join('')
+    :`<tr><td colspan="4" style="color:var(--t3);text-align:center;padding:20px">No birthdays on this date.</td></tr>`;
+  document.getElementById('cal-modal').classList.add('open');
+}
+
+/* ═══════════════════════ CSV ═══════════════════════ */
+let _students=[],_sKey='name',_sDir='asc';
+function handleDrop(e){
+  e.preventDefault();document.getElementById('dropzone').classList.remove('drag-over');
+  if(e.dataTransfer.files[0])uploadCSV(e.dataTransfer.files[0]);
+}
+async function uploadCSV(file){
+  if(!file)return;
+  toast('Uploading…','info');
+  const fd=new FormData();fd.append('file',file);
+  const{ok,data}=await apiFm('/api/csv/upload',fd);
+  if(!ok){toast(data.error||'Upload failed.','error');return;}
+
+  const errs=data.errors||[];
+  const valid=data.valid||[];
+
+  // Only show error card when there are errors
+  const ec=document.getElementById('err-card');
+  if(errs.length){
+    ec.style.display='';
+    document.getElementById('err-count').textContent=`— ${errs.length} row${errs.length>1?'s':''} skipped`;
+    let h=`<table><thead><tr><th>Row</th><th>Name</th><th>Email</th><th>Reason</th></tr></thead><tbody>`;
+    errs.forEach(r=>{h+=`<tr><td>${r.row||'?'}</td><td>${esc(r.name||'—')}</td><td>${esc(r.email||'—')}</td><td><span class="bdg bdg-red">${esc(r.reason)}</span></td></tr>`;});
+    h+='</tbody></table>';
+    document.getElementById('err-tbl').innerHTML=h;
+  }else{
+    ec.style.display='none';
+  }
+
+  toast(`✅ ${valid.length} students imported${errs.length?' · '+errs.length+' errors':''}`,errs.length?'info':'success');
+  loadStudents();loadDashboard();
+}
+
+async function loadStudents(){
+  const{ok,data}=await api('/api/students');
+  if(!ok)return;
+  _students=data.students||[];
+  renderTable();
+}
+
+function setSort(k){
+  if(_sKey===k)_sDir=_sDir==='asc'?'desc':'asc';else{_sKey=k;_sDir='asc';}
+  ['name','dob','email'].forEach(x=>{
+    document.getElementById('sp-'+x).classList.toggle('on',x===_sKey);
+    const a=document.getElementById('sa-'+x);
+    if(a)a.textContent=x===_sKey?(_sDir==='asc'?'↑':'↓'):'↕';
+    const th=document.querySelector(`th.sortable[onclick="setSort('${x}')"]`);
+    if(th){th.classList.remove('sort-asc','sort-desc');if(x===_sKey)th.classList.add(_sDir==='asc'?'sort-asc':'sort-desc');}
+  });
+  renderTable();
+}
+function clearQ(){document.getElementById('csv-q').value='';renderTable();}
+
+function renderTable(){
+  const q=(document.getElementById('csv-q').value||'').toLowerCase().trim();
+  let s=_students.filter(x=>!q||x.name.toLowerCase().includes(q)||x.email.toLowerCase().includes(q)||x.dob.toLowerCase().includes(q));
+  s=s.slice().sort((a,b)=>{
+    let av=a[_sKey]||'',bv=b[_sKey]||'';
+    if(_sKey==='dob'){
+      const n=v=>{const p=v.split('-');return p.length===3?+(p[2]+p[1]+p[0]):0;};
+      return _sDir==='asc'?n(av)-n(bv):n(bv)-n(av);
+    }
+    av=av.toLowerCase();bv=bv.toLowerCase();
+    return _sDir==='asc'?(av<bv?-1:av>bv?1:0):(av<bv?1:av>bv?-1:0);
+  });
+  document.getElementById('csv-ct').textContent=q?`${s.length} of ${_students.length}`:`${_students.length} students`;
+  const tb=document.getElementById('stud-tbody');
+  const nr=document.getElementById('no-res');
+  if(!_students.length){tb.innerHTML=`<tr><td colspan="5" style="color:var(--t3);text-align:center;padding:24px">No students yet. Upload a CSV.</td></tr>`;nr.style.display='none';return;}
+  if(!s.length&&_students.length){tb.innerHTML='';nr.style.display='';return;}
+  nr.style.display='none';
+  const MA=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const BC=['bdg-blue','bdg-green','bdg-amber','bdg-gray'];
+  tb.innerHTML=s.map((x,i)=>{
+    const pts=x.dob.split('-');
+    const mi=pts.length===3?parseInt(pts[1],10)-1:-1;
+    const ml=mi>=0?MA[mi]:'—';
+    return`<tr>
+      <td>${i+1}</td>
+      <td><strong>${esc(x.name)}</strong></td>
+      <td style="color:var(--t3)">${esc(x.email)}</td>
+      <td>${esc(x.dob)}</td>
+      <td><span class="bdg ${BC[Math.abs(mi)%BC.length]}">${ml}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ═══════════════════════ TEMPLATE ═══════════════════════ */
+async function loadTpl(){const{ok,data}=await api('/api/template');document.getElementById('tpl-ed').value=ok?(data.html||''):'';}
+async function saveTpl(){
+  const h=document.getElementById('tpl-ed').value;
+  const{ok,data}=await api('/api/template',{method:'POST',body:JSON.stringify({html:h})});
+  const m=document.getElementById('tpl-msg');m.textContent=ok?'✅ '+data.message:'❌ '+(data.error||'Error');m.style.color=ok?'var(--green)':'var(--red)';
+}
+async function uploadTplFile(file){
+  if(!file)return;
+  const fd=new FormData();fd.append('file',file);
+  const r=await fetch('/api/template/upload',{method:'POST',body:fd});
+  const d=await r.json().catch(()=>({}));
+  if(r.ok){toast('✅ '+d.message,'success');loadTpl();}else toast('❌ '+(d.error||'Upload failed.'),'error');
+}
+
+/* ═══════════════════════ SETTINGS ═══════════════════════ */
+async function loadSettings(){
+  const{ok,data}=await api('/api/settings');if(!ok)return;
+  document.getElementById('st-smtp').value=data.smtp_server||'smtp.gmail.com';
+  document.getElementById('st-port').value=data.smtp_port||587;
+  document.getElementById('st-email').value=data.sender_email||'';
+  document.getElementById('pw-note').style.display=data.password_set?'':'none';
+}
+async function saveSettings(){
+  const p={smtp_server:document.getElementById('st-smtp').value,smtp_port:parseInt(document.getElementById('st-port').value)||587,sender_email:document.getElementById('st-email').value};
+  const pw=document.getElementById('st-apw').value;if(pw)p.app_password=pw;
+  const{ok,data}=await api('/api/settings',{method:'POST',body:JSON.stringify(p)});
+  const m=document.getElementById('st-msg');m.textContent=ok?'✅ Settings saved.':'❌ '+(data.error||'Error');m.style.color=ok?'var(--green)':'var(--red)';
+  if(ok)loadSettings();
+}
+
+/* ═══════════════════════ SCHEDULER ═══════════════════════ */
+let _auto=false;
+function toggleAuto(){_auto=!_auto;syncTgl();}
+function syncTgl(){
+  const t=document.getElementById('atgl'),l=document.getElementById('atgl-lbl');
+  t.classList.toggle('on',_auto);
+  l.textContent=_auto?'Enabled — sends automatically each day':'Disabled';
+  l.style.color=_auto?'var(--green)':'var(--t3)';
+}
+async function loadScheduler(){
+  const{ok,data}=await api('/api/settings');if(!ok)return;
+  document.getElementById('sch-t').value=data.send_time||'08:00';
+  document.getElementById('sch-tz').value=data.timezone||'Asia/Kolkata';
+  _auto=data.auto_send==='true'||data.auto_send===true;syncTgl();
+  document.getElementById('nxt-run').textContent=data.next_run||'Not scheduled';
+}
+async function saveSched(){
+  const p={send_time:document.getElementById('sch-t').value,timezone:document.getElementById('sch-tz').value,auto_send:_auto};
+  const{ok,data}=await api('/api/settings',{method:'POST',body:JSON.stringify(p)});
+  toast(ok?'✅ Schedule saved.':'❌ '+(data.error||'Error'),ok?'success':'error');
+  if(ok&&data.next_run)document.getElementById('nxt-run').textContent=data.next_run;
+}
+
+/* ═══════════════════════ LOGS ═══════════════════════ */
+async function loadLogs(){
+  const{ok,data}=await api('/api/logs?n=200');
+  const tb=document.getElementById('log-tbody');
+  if(!ok||!data.logs||!data.logs.length){tb.innerHTML=`<tr><td colspan="5" style="color:var(--t3);text-align:center;padding:24px">No log entries yet.</td></tr>`;return;}
+  tb.innerHTML=data.logs.map(l=>{
+    const c=l.status==='sent'?'bdg-green':l.status==='skipped'?'bdg-amber':'bdg-red';
+    // "14 Oct 2026, 09:15:42" -> dimmed date + monospace time (seconds)
+    const parts=(l.time||l.sent_on||'').split(', ');
+    const ts=parts.length===2?`<span class="d">${esc(parts[0])}</span><span class="t">${esc(parts[1])}</span>`:`<span class="t">${esc(parts[0]||'')}</span>`;
+    return`<tr><td class="ts">${ts}</td><td><strong>${esc(l.name)}</strong></td><td style="color:var(--t3)">${esc(l.email)}</td><td><span class="bdg ${c}">${esc(l.status)}</span></td><td style="font-size:12px;color:var(--t3)">${esc(l.error||'')}</td></tr>`;
+  }).join('');
+}
+
+/* ═══════════════════════ THEME ═══════════════════════ */
+function curTheme(){return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('bit-theme',t);}catch(e){}
+  syncThemeBtns();
+}
+function toggleTheme(){setTheme(curTheme()==='dark'?'light':'dark');}
+function syncThemeBtns(){
+  const light=curTheme()==='light';
+  document.querySelectorAll('.theme-ico').forEach(e=>e.textContent=light?'🌙':'☀️');
+  document.querySelectorAll('.theme-lbl').forEach(e=>e.textContent=light?'Dark mode':'Light mode');
+}
+syncThemeBtns();
+
+/* ═══════════════════════ LOGO ═══════════════════════ */
+function applyLogo(v){
+  const src=v?`/api/logo?v=${encodeURIComponent(v)}`:'';
+  [['sb-logo-icon'],['auth-brand-icon']].forEach(([id])=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(src){el.classList.add('has-img');el.innerHTML=`<img src="${src}" alt="College logo">`;}
+    else{el.classList.remove('has-img');el.textContent='🎂';}
+  });
+  const pv=document.getElementById('logo-prev');
+  if(pv)pv.innerHTML=src?`<img src="${src}" alt="College logo">`:'<span>No logo yet</span>';
+  const del=document.getElementById('logo-del');
+  if(del)del.style.display=src?'':'none';
+}
+async function uploadLogo(f){
+  if(!f)return;
+  const fd=new FormData();fd.append('file',f);
+  const{ok,data}=await apiFm('/api/logo',fd);
+  if(!ok)return toast(data.error||'Logo upload failed.','error');
+  applyLogo(data.logo);toast('✅ Logo saved — it will appear on new PDF reports.','success');
+}
+async function deleteLogo(){
+  if(!confirm('Remove the college logo?'))return;
+  const{ok,data}=await api('/api/logo',{method:'DELETE'});
+  if(ok){applyLogo(data.logo);toast('Logo removed.','info');}
+}
+
+/* ═══════════════════════ UTIL ═══════════════════════ */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
+</body>
+</html>

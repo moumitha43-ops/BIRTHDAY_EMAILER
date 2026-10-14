@@ -1,0 +1,8 @@
+flask==3.0.3
+apscheduler==3.10.4
+playwright==1.44.0
+reportlab==4.2.0
+Werkzeug==3.0.3
+python-dotenv==1.0.1
+Pillow>=10.0.0
+tzdata>=2024.1

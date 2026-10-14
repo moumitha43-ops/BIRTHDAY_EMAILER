@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+data/
+*.db
+logs/
+uploads/
+output/
+.DS_Store
+venv/
+.venv/
+# template.html is intentionally tracked — do NOT add it here

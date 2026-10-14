@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: bit-birthday-wishes
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      playwright install chromium
+      playwright install-deps chromium
+    startCommand: python app.py
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 10000
+      - key: DATA_DIR
+        value: /data
+      - key: SECRET_KEY
+        generateValue: true
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
